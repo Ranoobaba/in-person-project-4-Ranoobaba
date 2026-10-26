@@ -1,5 +1,4 @@
-/* Week 5 Portfolio - Starter Styles
-   Students will transform this with Flexbox and Grid */
+/* Week 6 Portfolio - Interactive Portfolio Styles */
 
 /* CSS Reset and Base Styles */
 * {
@@ -17,7 +16,10 @@
     --bg-light: #f7fafc;
     --bg-dark: #2d3748;
     --white: #ffffff;
+    --surface: #ffffff;             /* page, cards and inputs; changes with the theme */
     --border-color: #e2e8f0;
+    --error-color: #dc2626;
+    --success-color: #059669;
 
     /* Spacing */
     --spacing-xs: 0.5rem;
@@ -29,13 +31,31 @@
     /* Typography */
     --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
     --font-mono: 'Courier New', monospace;
+
+    /* Height of the sticky navbar, so scrolled-to sections aren't hidden under it */
+    --nav-height: 72px;
+}
+
+/* Dark theme: script.js adds this class to <body> (extension task 3) */
+body.dark-theme {
+    --text-dark: #e2e8f0;
+    --text-light: #a0aec0;
+    --bg-light: #1a202c;
+    --bg-dark: #0d1117;
+    --surface: #232b3a;
+    --border-color: #4a5568;
 }
 
 body {
     font-family: var(--font-primary);
     line-height: 1.6;
     color: var(--text-dark);
-    background: var(--white);
+    background: var(--surface);
+}
+
+/* Sections land just below the sticky navbar when scrolled to */
+section {
+    scroll-margin-top: var(--nav-height);
 }
 
 /* Container */
@@ -78,8 +98,16 @@ a:hover {
     color: var(--secondary-color);
 }
 
-/* Navigation Bar - TO BE ENHANCED WITH FLEXBOX */
+button {
+    font: inherit;
+}
+
+/* Navigation Bar */
 #navbar {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    min-height: var(--nav-height);
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     padding: var(--spacing-sm) var(--spacing-md);
     position: sticky;
@@ -92,18 +120,18 @@ a:hover {
     color: var(--white);
     font-size: 1.5rem;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .nav-menu {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-left: auto;
     list-style: none;
 }
 
-.nav-menu li {
-    display: inline-block;
-    margin-left: var(--spacing-md);
-}
-
 .nav-link {
+    display: block;
     color: var(--white);
     font-weight: 500;
     padding: var(--spacing-xs) var(--spacing-sm);
@@ -116,11 +144,44 @@ a:hover {
     color: var(--white);
 }
 
+/* Link for the section currently on screen (Part 1 bonus) */
+.nav-link.active {
+    background: rgba(255,255,255,0.2);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--white);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: rgba(255,255,255,0.15);
+}
+
 /* Mobile Menu Toggle */
 .nav-toggle {
     display: none;
     width: 30px;
     height: 30px;
+    border: none;
+    background: transparent;
     cursor: pointer;
 }
 
@@ -133,8 +194,25 @@ a:hover {
     transition: 0.3s;
 }
 
-/* Hero Section - TO BE ENHANCED WITH FLEXBOX */
+/* Hamburger turns into an X while the menu is open */
+.nav-toggle.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.nav-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Hero Section */
 .hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: var(--white);
     padding: var(--spacing-xl) var(--spacing-md);
@@ -156,6 +234,13 @@ a:hover {
     font-size: 1.1rem;
     opacity: 0.8;
     margin-bottom: var(--spacing-md);
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm);
 }
 
 /* Buttons */
@@ -191,13 +276,12 @@ a:hover {
     color: var(--primary-color);
 }
 
-/* About Section - TO BE ENHANCED WITH GRID */
+/* About Section */
 .about-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-lg);
     margin-top: var(--spacing-md);
-}
-
-.about-text {
-    margin-bottom: var(--spacing-md);
 }
 
 .about-details {
@@ -230,17 +314,19 @@ a:hover {
     color: white;
 }
 
-/* Skills Section - TO BE TRANSFORMED WITH GRID */
+/* Skills Section */
 .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--spacing-md);
     margin-top: var(--spacing-md);
 }
 
 .skill-card {
-    background: var(--white);
+    background: var(--surface);
     padding: var(--spacing-md);
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: var(--spacing-md);
     transition: transform 0.3s ease;
 }
 
@@ -270,23 +356,18 @@ a:hover {
 
 .skill-level {
     height: 8px;
-    background: #e2e8f0;
+    background: var(--border-color);
     border-radius: 4px;
     overflow: hidden;
     margin: var(--spacing-sm) 0;
 }
 
+/* Bars start empty; script.js grows them to --skill-level when they scroll into view (Part 4) */
 .skill-progress {
     height: 100%;
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    width: var(--skill-level);
+    width: 0;
     transition: width 1s ease;
-    animation: fillProgress 1s ease forwards;
-}
-
-@keyframes fillProgress {
-    from { width: 0; }
-    to { width: var(--skill-level); }
 }
 
 .skill-percentage {
@@ -294,8 +375,8 @@ a:hover {
     color: var(--text-light);
 }
 
-/* Projects Section - TO BE ENHANCED WITH GRID */
-/* Filter Buttons - Week 7 Addition */
+/* Projects Section */
+/* Filter Buttons */
 .filter-buttons {
     display: flex;
     justify-content: center;
@@ -327,16 +408,53 @@ a:hover {
     color: var(--white);
 }
 
+/* Tag search box */
+.project-search {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-width: 360px;
+    margin: 0 auto var(--spacing-sm);
+}
+
+.project-search label {
+    font-weight: 500;
+}
+
+.project-search input {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    background: var(--surface);
+    color: var(--text-dark);
+    font: inherit;
+}
+
+.project-search input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.filter-count {
+    color: var(--text-light);
+    text-align: center;
+}
+
 .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: var(--spacing-md);
     margin-top: var(--spacing-md);
 }
 
 .project-card {
-    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    margin-bottom: var(--spacing-md);
+    cursor: pointer;
     transition: transform 0.3s ease;
 }
 
@@ -348,10 +466,11 @@ a:hover {
 .project-image {
     position: relative;
     overflow: hidden;
-    height: 250px;
+    aspect-ratio: 2 / 1;
 }
 
 .project-image img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -373,7 +492,8 @@ a:hover {
     transition: opacity 0.3s ease;
 }
 
-.project-card:hover .project-overlay {
+.project-card:hover .project-overlay,
+.project-overlay:focus-within {
     opacity: 1;
 }
 
@@ -392,6 +512,7 @@ a:hover {
     margin: var(--spacing-xs);
     border: 2px solid var(--white);
     border-radius: 25px;
+    white-space: nowrap;
     transition: all 0.3s ease;
 }
 
@@ -401,6 +522,9 @@ a:hover {
 }
 
 .project-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     padding: var(--spacing-md);
 }
 
@@ -427,7 +551,7 @@ a:hover {
 }
 
 .project-tags {
-    margin-top: var(--spacing-sm);
+    margin: var(--spacing-sm) 0;
 }
 
 .project-tag {
@@ -441,7 +565,69 @@ a:hover {
     margin-bottom: var(--spacing-xs);
 }
 
-/* Contact Form - TO BE ENHANCED WITH GRID */
+/* Pinned to the bottom so buttons line up across cards */
+.project-details-btn {
+    align-self: flex-start;
+    margin-top: auto;
+    padding: 0.4rem 1.2rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    background: transparent;
+    color: var(--primary-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.project-details-btn:hover {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+/* Project details panel */
+.project-dialog {
+    width: min(90vw, 560px);
+    margin: auto;
+    padding: var(--spacing-md);
+    border: none;
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text-dark);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.project-dialog::backdrop {
+    background: rgba(0,0,0,0.6);
+}
+
+.dialog-title {
+    padding-right: var(--spacing-md);
+}
+
+.dialog-description {
+    color: var(--text-light);
+}
+
+.dialog-close {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 50%;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.dialog-close:hover {
+    background: var(--border-color);
+}
+
+/* Contact Form */
 .contact-content {
     max-width: 800px;
     margin: 0 auto;
@@ -449,6 +635,16 @@ a:hover {
 
 .contact-form {
     margin-top: var(--spacing-md);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--spacing-md);
+}
+
+.form-group-full {
+    grid-column: 1 / -1;
 }
 
 .form-group {
@@ -468,6 +664,9 @@ a:hover {
     padding: var(--spacing-sm);
     border: 1px solid var(--border-color);
     border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-dark);
+    font: inherit;
     font-size: 1rem;
     transition: border-color 0.3s ease;
 }
@@ -482,9 +681,15 @@ a:hover {
     resize: vertical;
 }
 
-/* Form Validation Styles - Week 7 Addition */
+/* The section background is light, so the submit button uses the brand gradient */
+.contact-form .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+}
+
+/* Form Validation Styles */
 .error-message {
-    color: #dc2626;
+    color: var(--error-color);
     font-size: 0.875rem;
     margin-top: 0.25rem;
     display: block;
@@ -492,21 +697,35 @@ a:hover {
 
 .form-group input.error,
 .form-group textarea.error {
-    border-color: #dc2626;
+    border-color: var(--error-color);
 }
 
 .form-group input.success,
 .form-group textarea.success {
-    border-color: #059669;
+    border-color: var(--success-color);
 }
 
 .success-message {
     background: #d1fae5;
-    color: #059669;
+    color: var(--success-color);
     padding: var(--spacing-sm);
     border-radius: 8px;
     margin-top: var(--spacing-md);
     text-align: center;
+    font-weight: 500;
+}
+
+/* Character counter under the message box */
+.char-counter {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--text-light);
+    font-size: 0.875rem;
+    text-align: right;
+}
+
+.char-counter.error {
+    color: var(--error-color);
     font-weight: 500;
 }
 
@@ -518,12 +737,8 @@ a:hover {
     text-align: center;
 }
 
-.footer-content {
-    margin-bottom: var(--spacing-md);
-}
-
 .social-links {
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-sm);
 }
 
 .social-link {
@@ -538,7 +753,7 @@ a:hover {
     color: var(--primary-color);
 }
 
-/* Responsive Design - Basic */
+/* Responsive Design */
 @media (max-width: 768px) {
     h1 { font-size: 2rem; }
     h2 { font-size: 1.75rem; }
@@ -548,6 +763,92 @@ a:hover {
 
     .section {
         padding: var(--spacing-lg) 0;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    /* Navigation collapses into a slide-in menu (Part 3) */
+    .nav-actions {
+        margin-left: auto;
+    }
+
+    .nav-toggle {
+        display: block;
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: -100%;
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+        padding: var(--spacing-xs) 0;
+        background-color: var(--surface);
+        text-align: center;
+        box-shadow: 0 10px 27px rgba(0,0,0,0.05);
+        visibility: hidden;
+        transition: left 0.3s ease, visibility 0.3s ease;
+    }
+
+    .nav-menu.active {
+        left: 0;
+        visibility: visible;
+    }
+
+    .nav-menu .nav-link {
+        color: var(--text-dark);
+        padding: var(--spacing-sm);
+        border-radius: 0;
+    }
+
+    .nav-menu .nav-link:hover,
+    .nav-menu .nav-link.active {
+        background: var(--bg-light);
+        color: var(--primary-color);
+    }
+}
+
+@media (max-width: 480px) {
+    #navbar {
+        padding: var(--spacing-sm);
+    }
+
+    .nav-brand {
+        font-size: 1.25rem;
+    }
+
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    /* Icon-only theme toggle; the label stays available to screen readers */
+    .theme-toggle {
+        padding: 0.35rem 0.6rem;
+    }
+
+    .theme-toggle-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
     }
 }
 
